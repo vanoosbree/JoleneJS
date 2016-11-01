@@ -1,0 +1,129 @@
+<html>
+<head>
+	<title>Oscillator</title>
+	<script type="text/javascript">
+    window.onload = function() {
+
+    var audio = new window.webkitAudioContext(),
+        guitarPosition = 0,
+        melodyPosition = 0,
+        bassPosition = 0,
+        scale = {
+            h: 82.41,  //low e
+            j: 110.00, //a
+            k: 164.81, //e
+            l: 130.81, //c
+            m: 98.00 , //g
+            c: 261.63,
+            d: 293.66,
+            e: 329.63,
+            f: 349.23,
+            g: 392.00,
+            a: 440.00,
+            b: 493.88,
+            C: 523.25,
+            D: 587.33,
+            E: 659.25,
+            G: 783.99,
+            A: 880.00     
+        },
+        guitar =    "-ga-b--C---b-Cba-ga-b--C---b-Cba-a-e-aC--c-g-cE--g-d-gD--ga-b--C---b-Cba-g-d-gD--g-d-gD--ga-b--C---b-Cba-ga-b--C---b-Cba-a-e-aC--c-g-cE--g-d-gD--ga-b--C---b-Cba-g-d-gD--g-d-gD-";
+        bass =      "j-k-j-hmj-k-j-hmj-j-l-l-m-m-j-k-j-k-m-m-m-m-j-k-j-hmj-k-j-hmj-j-l-l-m-m-j-k-j-k-m-m-m-m-";
+        melody =    "-------------------------------g-a--.--C-C-----E-E-----G-A--GE---------E-E-D-D-D-D-b-b-C--a----------------------------g-a--.--C-C-----E-E-----G-A--GE---------E-E-D-D-D-D-b-b-C--a";
+
+    // GUITAR
+    setInterval(playGuitar, 1000 / 8);
+
+    function createGuitar(freq) {
+        var osc = audio.createOscillator();
+
+        osc.frequency.value = freq;
+        osc.type = "triangle";
+        osc.connect(audio.destination);
+        osc.start(0);
+
+        setTimeout(function() {
+            osc.stop(0);
+            osc.disconnect(audio.destination);
+        }, 1000 / 3.24)
+    }
+
+    function playGuitar() {
+        var note = guitar.charAt(guitarPosition),
+            freq = scale[note];
+        guitarPosition += 1;
+        if(guitarPosition >= guitar.length) {
+            guitarPosition = 0;
+        }
+        if(freq) {
+            createGuitar(freq);
+        }
+    }
+
+    // MELODY
+    setInterval(playMelody, 1000 / 8);
+
+    function createMelody(freq) {
+        var osc = audio.createOscillator();
+
+        osc.frequency.value = freq;
+        osc.type = "square";
+        osc.connect(audio.destination);
+        osc.start(0);
+
+        setTimeout(function() {
+            osc.stop(0);
+            osc.disconnect(audio.destination);
+        }, 1000 / 3.24)
+    }
+
+    function playMelody() {
+        var note = melody.charAt(melodyPosition),
+            freq = scale[note];
+        melodyPosition += 1;
+        if(melodyPosition >= melody.length) {
+            melodyPosition = 0;
+        }
+        if(freq) {
+            createMelody(freq);
+        }
+    }
+
+    // BASS
+    setInterval(playBass, 1000 / 4);
+
+    function createBass(freq) {
+        var osc2 = audio.createOscillator();
+
+        osc2.frequency.value = freq;
+        osc2.type = "sine";
+        osc2.connect(audio.destination);
+        osc2.start(0);
+
+        setTimeout(function() {
+            osc2.stop(0);
+            osc2.disconnect(audio.destination);
+        }, 1000 / 4)
+    }
+
+    function playBass() {
+        var note = bass.charAt(bassPosition),
+            freq = scale[note];
+        bassPosition += 1;
+        if(bassPosition >= bass.length) {
+            bassPosition = 0;
+        }
+        if(freq) {
+            createBass(freq);
+        }
+    }
+};
+
+
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>
